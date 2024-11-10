@@ -95,6 +95,49 @@ public class Superhero implements Contract {
         System.out.println("This item cannot be found in your inventory."); 
     }
     }
+
+    public boolean walk(String direction){
+
+        if (this.energyLevel>=energyLevel-1-(things.size()*0.5)){
+            if((direction.toLowerCase().contains("north")) || (direction.toLowerCase().contains("south")) || (direction.toLowerCase().contains("east")) || (direction.toLowerCase().contains("west"))){
+                energyLevel=energyLevel-1-(things.size()*0.5);
+                System.out.println("You are currently walking "+ direction + ".");
+                System.out.println("Energy level: "+ energyLevel);
+                return true;
+            }else{
+                System.out.println("You can only walk north, south, east, or west.");
+                return false;
+            }
+        }else{
+            System.out.println("You do not have enough energy to walk. Try resting or removing things from your inventory first.");
+            return false;
+        }
+
+    }
+
+    public boolean fly(int x, int y){
+
+        if (this.energyLevel>=energyLevel-(x+y)-(things.size()*(x*y)*(0.25))){
+            energyLevel=energyLevel-(x+y)-(things.size()*(x*y)*(0.25));
+            System.out.println("You have flown "+ Math.sqrt(x^2+y^2) + " miles.");
+            System.out.println("Energy level: "+ energyLevel);
+            return true;
+        }else{
+            System.out.println("You do not have enough energy to fly. Try resting or removing things from your inventory first.");
+            return false;
+        }
+    }
+
+    public Number shrink(){
+        if (this.size>(1/16)*this.defaultSize){
+            this.size=this.size*(1/2);
+            System.out.println("New size: " + this.size+ " feet");
+            return size;
+        }else{
+            System.out.println("Cannot shrink any further.");
+            return size;
+        }
+    }
     
     public static void main(String[] args){
 

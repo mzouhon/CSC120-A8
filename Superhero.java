@@ -1,12 +1,10 @@
 import java.util.ArrayList;
 
-public class Superhero implements Contract {
+public class Superhero   {
 
     private String name; 
     private String alias;
     
-    private double maxSpeed;
-    private double speed; // in meters per second
     
     private double defaultSize;
     private double size; // in feet
@@ -17,13 +15,10 @@ public class Superhero implements Contract {
 
 
 
-    public Superhero( String name, String alias, double maxSpeed, double defaultSize){
+    public Superhero( String name, String alias, double defaultSize){
         this.name=name;
         this.alias=alias;
-        this.maxSpeed=maxSpeed;
         this.defaultSize=defaultSize;
-
-        this.speed=0;
         this.size=defaultSize;
         this.energyLevel=100.0;
         this.things= new ArrayList<>();
@@ -36,14 +31,6 @@ public class Superhero implements Contract {
 
     public String getAlias(){
         return this.alias;
-    }
-
-    public double getMaxSpeed(){
-        return this.maxSpeed;
-    }
-
-    public double getSpeed(){
-        return this.speed;
     }
 
     public double getDefaultSize(){
@@ -98,9 +85,11 @@ public class Superhero implements Contract {
 
     public boolean walk(String direction){
 
-        if (this.energyLevel>=energyLevel-1-(things.size()*0.5)){
+        double costToWalk=1+(things.size()*0.05);
+
+        if (this.energyLevel>=costToWalk){
             if((direction.toLowerCase().contains("north")) || (direction.toLowerCase().contains("south")) || (direction.toLowerCase().contains("east")) || (direction.toLowerCase().contains("west"))){
-                energyLevel=energyLevel-1-(things.size()*0.5);
+                energyLevel=energyLevel-costToWalk;
                 System.out.println("You are currently walking "+ direction + ".");
                 System.out.println("Energy level: "+ energyLevel);
                 return true;
@@ -117,20 +106,22 @@ public class Superhero implements Contract {
 
     public boolean fly(int x, int y){
 
-        if (this.energyLevel>=energyLevel-(x+y)-(things.size()*(x*y)*(0.25))){
-            energyLevel=energyLevel-(x+y)-(things.size()*(x*y)*(0.25));
-            System.out.println("You have flown "+ Math.sqrt(x^2+y^2) + " miles.");
+        double costToFly=(x+y)+(things.size()*(x+y)*(0.10));
+
+        if (this.energyLevel>=costToFly){
+            energyLevel=energyLevel-costToFly;
+            System.out.println("You have flown "+ Math.sqrt((Math.pow(x,2))+(Math.pow(y,2))) + " miles.");
             System.out.println("Energy level: "+ energyLevel);
             return true;
         }else{
-            System.out.println("You do not have enough energy to fly. Try resting or removing things from your inventory first.");
+            System.out.println("You do not have enough energy to fly.");
             return false;
         }
     }
 
     public Number shrink(){
-        if (this.size>(1/16)*this.defaultSize){
-            this.size=this.size*(1/2);
+        if (this.size>=(1.0/16.0)*this.defaultSize){
+            this.size=this.size*(0.5);
             System.out.println("New size: " + this.size+ " feet");
             return size;
         }else{
@@ -138,11 +129,44 @@ public class Superhero implements Contract {
             return size;
         }
     }
+
+    public Number grow(){
+
+        if(this.size<this.defaultSize){
+            this.size=this.size*2;
+            System.out.println("New size: " + this.size+ " feet.");
+            return size;
+        }else{
+            System.out.println("You have reached your default size.");
+            return size;
+        }
+    }
+
+    public void rest(){
+        if (energyLevel<100){
+            System.out.println("Resting...");
+        while (energyLevel<100){
+            energyLevel++;
+        
+        }
+        System.out.println("Your energy levels have been fully restored.");
+    
+    }else{
+        System.out.println("You are already fully rested.");
+    }
+    }
+
+    //dont forget to overwrite toString
+
+    
     
     public static void main(String[] args){
+        Superhero wanda= new Superhero("Wanda", "Scarlett Witch", 5.5);
+        
 
-
-
+        wanda.rest();
+        wanda.fly(20,50);
+        wanda.rest();
 
 
     
